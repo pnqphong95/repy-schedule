@@ -3,6 +3,8 @@ import { z } from 'zod';
 import { addMonths, addDays, isWeekend, format } from 'date-fns';
 import type { ScheduleRequest, ScheduleResponse } from '@/types/schedule';
 
+export const runtime = 'edge';
+
 const scheduleSchema = z.object({
   totalAmount: z.number().positive(),
   loanTerm: z.number().int().min(1).max(600),
