@@ -44,21 +44,15 @@ The system generates a detailed repayment schedule including:
 
 ### Backend
 - Next.js API routes
-- Input validation
+- Input validation using Zod
 - Business logic for schedule calculation
-- Error handling
+- Error handling and loading states
 
 ### Data Validation Rules
 - Loan amount must be greater than 0
 - Loan term must be between 1 and 600 months (50 years)
 - No restrictions on interest rates
 - All mandatory fields must be provided
-
-### Future Enhancements
-- Database integration for schedule storage
-- User authentication
-- Schedule history
-- Export functionality
 
 ## API Endpoints
 
@@ -125,6 +119,7 @@ Creates a new loan repayment schedule
    - Added support for early repayment penalties
    - Implemented weekend date adjustment
    - Added error handling and loading states
+   - Implemented request throttling and caching
 
 ### Upcoming Tasks
 1. Data Export

@@ -1,8 +1,33 @@
+# Repy Schedule - Loan Repayment Schedule Generator
+
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`c3`](https://developers.cloudflare.com/pages/get-started/c3).
+
+## Project Overview
+Repy Schedule is a modern web application that helps users generate loan repayment schedules. The application provides a user-friendly interface for inputting loan details and generates a comprehensive repayment schedule.
+
+## Features
+- Calculate loan repayment schedules with customizable parameters
+- Support for promotional interest rates
+- Early repayment penalty calculations
+- Modern, responsive UI built with Tailwind CSS and shadcn/ui
+- Real-time schedule generation
+- Input validation and error handling
 
 ## Getting Started
 
-First, run the development server:
+First, install the dependencies:
+
+```bash
+npm install
+# or
+yarn install
+# or
+pnpm install
+# or
+bun install
+```
+
+Then, run the development server:
 
 ```bash
 npm run dev
@@ -15,6 +40,13 @@ bun dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+
+## Technology Stack
+- Next.js with TypeScript
+- Tailwind CSS for styling
+- shadcn/ui for UI components
+- Zod for form validation
+- React Hook Form for form management
 
 ## Cloudflare integration
 
@@ -65,3 +97,13 @@ In order to enable the example:
 After doing this you can run the `dev` or `preview` script and visit the `/api/hello` route to see the example in action.
 
 Finally, if you also want to see the example work in the deployed application make sure to add a `MY_KV_NAMESPACE` binding to your Pages application in its [dashboard kv bindings settings section](https://dash.cloudflare.com/?to=/:account/pages/view/:pages-project/settings/functions#kv_namespace_bindings_section). After having configured it make sure to re-deploy your application.
+
+## Contributing
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add some amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+## License
+This project is licensed under the MIT License - see the LICENSE file for details.
