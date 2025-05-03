@@ -13,7 +13,7 @@ const scheduleSchema = z.object({
     period: z.number().int().positive(),
     interestRate: z.number().min(0)
   })).optional(),
-  earlyRepaymentPenalties: z.array(z.object({
+  _earlyRepaymentPenalties: z.array(z.object({
     period: z.number().int().positive(),
     penaltyRate: z.number().min(0)
   })).optional()
@@ -35,6 +35,7 @@ function calculateSchedule(request: ScheduleRequest): ScheduleResponse {
     disbursementDate = new Date().toISOString(),
     firstPaymentDate,
     promotions = [],
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     earlyRepaymentPenalties = []
   } = request;
 
