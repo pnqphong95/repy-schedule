@@ -152,7 +152,7 @@ export function ScheduleForm() {
     // Check if this is a duplicate request
     if (currentRequestHash === lastRequestHash && lastResponse) {
       // Simulate network delay for consistency
-      await new Promise(resolve => setTimeout(resolve, 500));
+      await new Promise(resolve => setTimeout(resolve, 200));
       setSchedule(lastResponse);
       setLoading(false);
       return;
