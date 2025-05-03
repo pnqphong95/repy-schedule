@@ -1,9 +1,17 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
+import { apiMiddleware } from '@/middleware/api';
 import { z } from 'zod';
 import { addMonths, addDays, isWeekend, format } from 'date-fns';
 import type { ScheduleRequest, ScheduleResponse } from '@/types/schedule';
 
 export const runtime = 'edge';
+
+// Rate limiting configuration
+const RATE_LIMIT = 10; // requests
+const RATE_LIMIT_WINDOW = 60 * 1000; // 1 minute in milliseconds
+
+// In-memory store for rate limiting (in production, use Redis or similar)
+const rateLimitStore = new Map<string, { count: number; resetTime: number }>();
 
 const scheduleSchema = z.object({
   totalAmount: z.number().positive(),
@@ -77,24 +85,58 @@ function calculateSchedule(request: ScheduleRequest): ScheduleResponse {
   return { schedule };
 }
 
-export async function POST(request: Request) {
+export async function POST(request: NextRequest) {
+  // Apply API middleware
+  const middlewareResponse = apiMiddleware(request);
+  if (middlewareResponse.status !== 200) {
+    return middlewareResponse;
+  }
+
+  // Get client IP for rate limiting
+  const forwardedFor = request.headers.get('x-forwarded-for');
+  const ip = forwardedFor ? forwardedFor.split(',')[0] : 'unknown';
+  const now = Date.now();
+
+  // Check rate limit
+  const rateLimit = rateLimitStore.get(ip);
+  if (rateLimit) {
+    if (now > rateLimit.resetTime) {
+      // Reset if window has passed
+      rateLimitStore.set(ip, { count: 1, resetTime: now + RATE_LIMIT_WINDOW });
+    } else if (rateLimit.count >= RATE_LIMIT) {
+      return new NextResponse(
+        JSON.stringify({ error: 'Too many requests' }),
+        { status: 429, headers: { 'Content-Type': 'application/json' } }
+      );
+    } else {
+      // Increment count
+      rateLimit.count++;
+    }
+  } else {
+    // First request from this IP
+    rateLimitStore.set(ip, { count: 1, resetTime: now + RATE_LIMIT_WINDOW });
+  }
+
   try {
     const body = await request.json();
+    
+    // Validate request body
     const validatedData = scheduleSchema.parse(body);
+
     const schedule = calculateSchedule(validatedData);
     
     return NextResponse.json(schedule);
   } catch (error) {
     if (error instanceof z.ZodError) {
-      return NextResponse.json(
-        { error: 'Validation error', details: error.errors },
-        { status: 400 }
+      return new NextResponse(
+        JSON.stringify({ error: 'Invalid request data', details: error.errors }),
+        { status: 400, headers: { 'Content-Type': 'application/json' } }
       );
     }
-    
-    return NextResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 }
+
+    return new NextResponse(
+      JSON.stringify({ error: 'Internal server error' }),
+      { status: 500, headers: { 'Content-Type': 'application/json' } }
     );
   }
 } 
