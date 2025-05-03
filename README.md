@@ -5,6 +5,9 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`c3`](https:
 ## Project Overview
 Repy Schedule is a modern web application that helps users generate loan repayment schedules. The application provides a user-friendly interface for inputting loan details and generates a comprehensive repayment schedule.
 
+## Live Demo
+Visit the live demo at [https://repy-schedule.pages.dev](https://repy-schedule.pages.dev)
+
 ## Features
 - Calculate loan repayment schedules with customizable parameters
 - Support for promotional interest rates
